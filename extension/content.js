@@ -8,6 +8,9 @@ function createDulaWidget() {
     widget.style.marginBottom = '16px';
 
     widget.innerHTML = `
+        <a class="timeline-comment-avatar d-none d-md-block" href="#">
+            <img class="avatar avatar-user" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="40" height="40" alt="DULA">
+        </a>
         <div class="timeline-comment color-bg-default dula-glow-box">
             <div class="timeline-comment-header clearfix dula-header">
                 <h3 class="timeline-comment-header-text f5 text-normal">
