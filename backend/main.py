@@ -115,6 +115,7 @@ def process_confirmation(repo_full_name: str, pr_number: int):
 
 
 @app.post("/webhook")
+@app.post("/webhook/")
 async def github_webhook(request: Request, background_tasks: BackgroundTasks):
     body = await request.body()
     
