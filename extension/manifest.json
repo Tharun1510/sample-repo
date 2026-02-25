@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "DULA AI Code Reviewer",
+  "version": "1.0",
+  "description": "Native Context-Aware UI for the DULA Dual-Layer Code Review Engine.",
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*/pull/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8000/*",
+    "http://localhost:8000/*",
+    "https://*.onrender.com/*"
+  ]
+}

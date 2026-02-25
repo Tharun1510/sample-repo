@@ -2,6 +2,8 @@ import os
 import hmac
 import hashlib
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks  # type: ignore
+from fastapi.middleware.cors import CORSMiddleware  # type: ignore
+from pydantic import BaseModel  # type: ignore
 from dotenv import load_dotenv  # type: ignore
 
 from .github_client import GitHubClient  # type: ignore
@@ -10,6 +12,15 @@ from .ai_engine import AIEngine  # type: ignore
 load_dotenv()
 
 app = FastAPI(title="DULA: Dual-Layer LLM Code Review Bot")
+
+# Enable CORS so the Chromium Extension can send requests from github.com
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Load environment variables
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
@@ -158,6 +169,17 @@ async def github_webhook(request: Request, background_tasks: BackgroundTasks):
             background_tasks.add_task(process_confirmation, repo_full_name, pr_number)
 
     return {"status": "ok"}
+
+class ExtensionReviewRequest(BaseModel):
+    repo_full_name: str
+    pr_number: int
+    instruction: str = "Perform a deep structural code review."
+
+@app.post("/trigger-review")
+async def trigger_review_from_extension(req: ExtensionReviewRequest, background_tasks: BackgroundTasks):
+    """Endpoint explicitly for the DULA UI Chrome Extension to trigger Layer 1 directly."""
+    background_tasks.add_task(process_review_request, req.repo_full_name, req.pr_number, req.instruction)
+    return {"message": "DULA Layer 1 triggered via UI Extension successfully!"}
 
 @app.get("/")
 def home():

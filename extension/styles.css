@@ -1,0 +1,23 @@
+#dula-review-btn {
+    background: linear-gradient(90deg, #6b21a8, #9333ea);
+    color: white;
+    border: none;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+    transition: all 0.3s ease;
+    margin-right: 8px;
+    z-index: 1000;
+}
+
+#dula-review-btn:hover {
+    background: linear-gradient(90deg, #9333ea, #a855f7);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
+    transform: scale(1.05);
+}
+
+#dula-review-btn:disabled {
+    background: #4b5563;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
