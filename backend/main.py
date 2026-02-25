@@ -170,16 +170,49 @@ async def github_webhook(request: Request, background_tasks: BackgroundTasks):
 
     return {"status": "ok"}
 
-class ExtensionReviewRequest(BaseModel):
+class Layer1Request(BaseModel):
     repo_full_name: str
     pr_number: int
     instruction: str = "Perform a deep structural code review."
 
-@app.post("/trigger-review")
-async def trigger_review_from_extension(req: ExtensionReviewRequest, background_tasks: BackgroundTasks):
-    """Endpoint explicitly for the DULA UI Chrome Extension to trigger Layer 1 directly."""
-    background_tasks.add_task(process_review_request, req.repo_full_name, req.pr_number, req.instruction)
-    return {"message": "DULA Layer 1 triggered via UI Extension successfully!"}
+@app.post("/api/layer1")
+def api_layer1(req: Layer1Request):
+    """Synchronous endpoint for the extension widget to fetch the Enhanced Prompt."""
+    pr_diff = gh_client.get_pr_diff(req.repo_full_name, req.pr_number)
+    repo_structure = gh_client.get_repo_structure(req.repo_full_name)
+    
+    key_context = "No specific dependency files configured."
+    if "package.json" in repo_structure:
+         content = gh_client.get_file_content(req.repo_full_name, "package.json")
+         if content: key_context = "package.json:\n" + content[:1000]
+    elif "requirements.txt" in repo_structure:
+         content = gh_client.get_file_content(req.repo_full_name, "requirements.txt")
+         if content: key_context = "requirements.txt:\n" + content[:1000]
+
+    enhanced_prompt = ai_engine.layer_1_enhance_prompt(
+        basic_prompt=req.instruction,
+        repo_structure=repo_structure,
+        key_files_context=key_context,
+        pr_diff=pr_diff
+    )
+    return {"enhanced_prompt": enhanced_prompt}
+
+class Layer2Request(BaseModel):
+    repo_full_name: str
+    pr_number: int
+    confirmed_prompt: str
+
+@app.post("/api/layer2")
+def api_layer2(req: Layer2Request):
+    """Synchronous endpoint to execute the confirmed prompt and post to GitHub."""
+    pr_diff = gh_client.get_pr_diff(req.repo_full_name, req.pr_number)
+    final_review = ai_engine.layer_2_generate_review(req.confirmed_prompt, pr_diff)
+    
+    # Post it back to GitHub natively so it shows up in the PR
+    header = "## 🧠 DULA Layer 2: Final Intelligent Code Review\n\n"
+    gh_client.post_comment(req.repo_full_name, req.pr_number, header + final_review)
+    
+    return {"status": "success", "review": final_review}
 
 @app.get("/")
 def home():
