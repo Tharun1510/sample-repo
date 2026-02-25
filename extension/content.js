@@ -8,11 +8,12 @@ function createDulaWidget() {
     widget.style.marginBottom = '16px';
 
     widget.innerHTML = `
-        <a class="timeline-comment-avatar d-none d-md-block" href="#">
-            <img class="avatar avatar-user" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="40" height="40" alt="DULA">
-        </a>
-        <div class="timeline-comment color-bg-default dula-glow-box">
-            <div class="timeline-comment-header clearfix dula-header">
+        <div style="position: relative; width: 100%;">
+            <a class="d-none d-md-block" href="#" style="position: absolute; left: 0; top: 0;">
+                <img class="avatar avatar-user" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="40" height="40" alt="DULA" style="border-radius: 50%;">
+            </a>
+            <div class="timeline-comment color-bg-default dula-glow-box" style="margin-left: 56px;">
+                <div class="timeline-comment-header clearfix dula-header">
                 <h3 class="timeline-comment-header-text f5 text-normal">
                     <strong class="css-truncate">
                        <span class="css-truncate-target" style="color: #9333ea;">🧠 DULA Bot</span>
@@ -58,6 +59,7 @@ function createDulaWidget() {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     `;
     return widget;
