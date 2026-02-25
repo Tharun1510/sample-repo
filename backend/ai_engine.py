@@ -37,6 +37,13 @@ class AIEngine:
         3. Maintainability and readability
         4. Alignment with the overall repository architecture.
         
+        CRITICAL RULES FOR THE ENHANCED PROMPT:
+        - It MUST instruct the downstream LLM to act as a strict static analysis CLI tool, NOT a conversational AI.
+        - It MUST instruct the LLM to provide EXACT LINE NUMBERS for every issue identified from the PR Diff.
+        - It MUST instruct the LLM to provide concrete code snippets of the flaw alongside the suggested structural replacement.
+        - It MUST instruct the LLM to assign an "Impact Severity" (Critical, High, Medium, Low) and a "Confidence Score" to each finding.
+        - It MUST instruct the LLM to format the output in a highly structured Markdown report (e.g., using tables for metrics and defined technical sections for issues).
+        
         Your output should JUST be the enhanced prompt text, written in the second person ("You are an expert...").
         Do not include pleasantries. Make it look as academic and rigorous as possible.
         """
@@ -64,8 +71,13 @@ class AIEngine:
         {pr_diff}
         ---
         
-        Please format your output beautifully in Markdown. Use headings, bullet points, and code blocks
-        where appropriate to highlight specific lines in the diff.
+        EXECUTION PARAMETERS:
+        1. Format your output as a highly technical Markdown report.
+        2. NEVER use chatty, conversational filler (e.g., "Here is the review", "I found missing things").
+        3. Act completely like an automated Code Analysis system producing a structured STDOUT log.
+        4. For EVERY issue detected, reference the exact line of code from the PR payload.
+        5. For EVERY issue, provide the flawed code block and the requested corrected code block (Suggestion).
+        6. Start with a "Summary Metric Table" displaying overall Code Health and Security Posture.
         """
 
         try:
