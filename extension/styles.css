@@ -1,23 +1,36 @@
-#dula-review-btn {
-    background: linear-gradient(90deg, #6b21a8, #9333ea);
-    color: white;
-    border: none;
-    font-weight: bold;
-    box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
-    transition: all 0.3s ease;
-    margin-right: 8px;
-    z-index: 1000;
+/* DULA Advanced Timeline Widget Styling */
+.dula-glow-box {
+    border: 1px solid #9333ea !important;
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.15);
+    transition: box-shadow 0.3s ease;
 }
 
-#dula-review-btn:hover {
-    background: linear-gradient(90deg, #9333ea, #a855f7);
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
-    transform: scale(1.05);
+.dula-glow-box:hover {
+    box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);
 }
 
-#dula-review-btn:disabled {
-    background: #4b5563;
-    box-shadow: none;
-    cursor: not-allowed;
-    transform: none;
+.dula-header {
+    background-color: rgba(147, 51, 234, 0.05) !important;
+    border-bottom: 1px solid #e5e7eb !important;
+}
+
+/* Make sure the text area looks like code */
+#dula-prompt-editor {
+    background-color: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+/* Dark mode overrides (GitHub auto-switches based on OS, but specific DULA elements need tweaks) */
+@media (prefers-color-scheme: dark) {
+    .dula-header {
+        border-bottom: 1px solid #30363d !important;
+    }
+
+    #dula-prompt-editor {
+        background-color: #0d1117;
+        color: #c9d1d9;
+        border: 1px solid #30363d;
+    }
 }
