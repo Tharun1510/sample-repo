@@ -30,7 +30,9 @@ function createDulaWidget() {
                             <option value="Perform a comprehensive security and structural code review.">Deep Structural & Security Review</option>
                             <option value="Check for memory leaks and time complexity performance.">Performance & Optimization Review</option>
                             <option value="Check for architectural alignment and clean code principles.">Architectural Alignment Review</option>
+                            <option value="custom">Add your own review instruction...</option>
                         </select>
+                        <input type="text" id="dula-custom-instruction" class="form-control width-full mb-2" placeholder="E.g., Check for SQL injection vulnerabilities" style="display: none;">
                         <button id="dula-trigger-btn" class="btn btn-primary">Synthesize Enhanced Prompt</button>
                     </div>
                     
@@ -84,6 +86,12 @@ function injectDulaWidget() {
     document.getElementById('dula-confirm-btn').addEventListener('click', handleTriggerLayer2);
     document.getElementById('dula-cancel-btn').addEventListener('click', () => switchState(1));
     document.getElementById('dula-reset-btn').addEventListener('click', () => switchState(1));
+
+    // Toggle custom input visibility
+    document.getElementById('dula-review-type').addEventListener('change', (e) => {
+        const customInput = document.getElementById('dula-custom-instruction');
+        customInput.style.display = (e.target.value === 'custom') ? 'block' : 'none';
+    });
 }
 
 function switchState(stateNumber) {
@@ -104,7 +112,11 @@ function getPrContext() {
 
 async function handleTriggerLayer1() {
     switchState(2);
-    const instruction = document.getElementById('dula-review-type').value;
+    let instruction = document.getElementById('dula-review-type').value;
+    if (instruction === 'custom') {
+        instruction = document.getElementById('dula-custom-instruction').value.trim();
+        if (!instruction) instruction = "Perform a general structural code review.";
+    }
     const ctx = getPrContext();
 
     try {
