@@ -72,12 +72,51 @@ class AIEngine:
         ---
         
         EXECUTION PARAMETERS:
-        1. Format your output as a highly technical Markdown report.
-        2. NEVER use chatty, conversational filler (e.g., "Here is the review", "I found missing things").
-        3. Act completely like an automated Code Analysis system producing a structured STDOUT log.
-        4. For EVERY issue detected, reference the exact line of code from the PR payload.
-        5. For EVERY issue, provide the flawed code block and the requested corrected code block (Suggestion).
-        6. Start with a "Summary Metric Table" displaying overall Code Health and Security Posture.
+        1. Format your output EXACTLY as the following technical Markdown template. Do not deviate.
+        2. NEVER use chatty, conversational filler. Act completely like an automated Code Analysis system producing a structured STDOUT log.
+        
+        REQUIRED TEMPLATE FORMAT:
+        # Code Review Report for PR Diff
+
+        ## Summary
+        *   **Diff Scope:** (Concise statement detailing the nature of changes)
+        *   **Overall Impact Assessment:** (A high-level synthesis of the PR's aggregate impact)
+
+        ## Findings Overview
+        ### 1. Time and Space Complexity Issues Identified
+        (List concise titles of issues found here, or "No issues identified in this category within the provided diff.")
+
+        ### 2. Security Vulnerabilities Identified
+        (List concise titles of issues found here, or "No issues identified in this category within the provided diff.")
+
+        ### 3. Maintainability and Readability Issues Identified
+        (List concise titles of issues found here, or "No issues identified in this category within the provided diff.")
+
+        ### 4. Architectural Alignment Issues Identified
+        (List concise titles of issues found here, or "No issues identified in this category within the provided diff.")
+
+        ---
+
+        ## Detailed Findings
+        (Provide an enumerated list of all identified issues across all categories. Each item MUST follow this strict schema):
+
+        ### Finding [N]: [Concise, Technical Issue Title]
+        *   **Category:** [e.g., Security, Maintainability, Performance, Architectural]
+        *   **Issue Description:** [A detailed, objective problem statement explaining the flaw.]
+        *   **File:** `[FilePathFromDiff]`
+        *   **Line Numbers (PR Diff):** `[LineStart]-[LineEnd]`
+        *   **Flawed Code Snippet:**
+            ```[language]
+            (Present the exact lines from the PR diff that illustrate the identified flaw. Include the '+' or '-' prefixes if they clarify the change).
+            ```
+        *   **Suggested Structural Replacement/Correction:**
+            (If the specific line is vulnerable, say "Change this line to:" then provide the replacement line or block. If the entire logical block or code is wrong, provide the fully corrected code block and say "Use this entire corrected code segment:")
+            ```[language]
+            (Provide concrete, corrected code snippet that rectifies the identified flaw.)
+            ```
+        *   **Impact Severity:** [Critical | High | Medium | Low]
+        *   **Confidence Score:** [High | Medium | Low]
+        ---
         """
 
         try:
