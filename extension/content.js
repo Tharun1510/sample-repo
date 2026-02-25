@@ -2,19 +2,27 @@ function injectDulaButton() {
     // Avoid injecting multiple times
     if (document.getElementById('dula-review-btn')) return;
 
-    // Find the primary PR header actions area
-    const actionMenu = document.querySelector('.gh-header-actions');
-    if (!actionMenu) return;
-
     // Create the DULA button
     const btn = document.createElement('button');
     btn.id = 'dula-review-btn';
-    btn.className = 'btn btn-sm btn-primary dula-glow';
+    btn.className = 'btn btn-primary dula-glow';
     btn.innerHTML = '🧠 Request DULA Review';
     btn.onclick = triggerDulaReview;
 
-    // Inject the button to the start of the menu
-    actionMenu.prepend(btn);
+    // Make it a Floating Action Button (FAB) so it's impossible to miss!
+    Object.assign(btn.style, {
+        position: 'fixed',
+        bottom: '40px',
+        right: '40px',
+        zIndex: '999999',
+        padding: '12px 24px',
+        borderRadius: '50px',
+        fontSize: '16px',
+        boxShadow: '0 4px 15px rgba(147, 51, 234, 0.6)'
+    });
+
+    // Inject directly into the body so it always appears regardless of GitHub UI updates
+    document.body.appendChild(btn);
 }
 
 async function triggerDulaReview() {
