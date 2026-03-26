@@ -20,7 +20,7 @@ DULA solves these problems using a three-pronged architecture:
 A native web extension that continuously monitors the GitHub Document Object Model (DOM). When a Pull Request is detected, it actively injects a Custom Trigger Node (`🧠 Request DULA Review`) into the GitHub interface. This bypasses the need for CLI commands and provides a seamless UI/UX. Clicking the button emits a JSON payload to the backend REST API.
 
 ### B. The Event-Driven FastAPI Orchestrator (Middleware)
-A robust Python backend leveraging `FastAPI`, `Uvicorn`, and `Smee.io` (for Webhook tunneling). It exposes asynchronous endpoints (`/webhook`, `/trigger-review`) to consume events from both GitHub natively and the Chromium Extension. It enforces cryptographic payload validation to prevent unauthorized trigger events.
+A robust Python backend leveraging `FastAPI` and deployed to the cloud via **Render.com**. It exposes asynchronous endpoints (`/webhook`, `/trigger-review`) to consume events from both GitHub natively and the Chromium Extension. It enforces cryptographic payload validation to prevent unauthorized trigger events.   
 
 ### C. The Dual-Layer LLM Cognitive Engine (Core AI)
 The brain of the system, powered by the `google-generativeai` SDK (Gemini 1.5 Flash).
@@ -32,7 +32,7 @@ The brain of the system, powered by the `google-generativeai` SDK (Gemini 1.5 Fl
 
 ## 4. Hardware and Software Specifications
 **(Expand these significantly for the report)**
-*   **Backend:** Python 3.10+, FastAPI framework, Uvicorn ASGI server.
+*   **Backend:** Python 3.10+, FastAPI framework, deployed via Render.com cloud infrastructure.
 *   **Client Extension:** HTML5, CSS3, DOM Manipulation via vanilla JavaScript, Manifest V3.
 *   **AI Infrastructure:** Google Gemini Pro/Flash API integration via `google.generativeai`.
 *   **Version Control & Integration:** Git, GitHub API (Webhooks, Pull Requests, Comments), Personal Access Tokens (PAT).
@@ -61,7 +61,7 @@ The core algorithmic component.
 
 ### Module 4: The Chromium Extension (`content.js`, `manifest.json`, `styles.css`)
 *   **DOM Observer:** Uses `MutationObserver` to watch for Single-Page Application (SPA) DOM changes in GitHub's React framework.
-*   **CORS Request:** Utilizes the Fetch API to send `POST` requests across origins (`github.com` to `localhost`/`Render`) to trigger the FastAPI backend.
+*   **Cross-Origin Request:** Utilizes the Fetch API to send `POST` requests directly to the cloud-hosted FastAPI backend (`onrender.com`), bypassing local runtime requirements.
 
 ---
 
@@ -72,7 +72,7 @@ The core algorithmic component.
 3.  **System Design (15 Pages):** You must draw UML Diagrams:
     *   **Use Case Diagram:** Actors: Developer, Reviewer, GitHub System, DULA System.
     *   **Sequence Diagram:** Show the flow from Extension Click -> FastAPI -> GitHub API (fetch code) -> Gemini Layer 1 -> GitHub API (post confirm) -> User Confirm -> FastAPI -> Gemini Layer 2 -> GitHub API.
-    *   **Architecture Diagram:** Show the Webhook tunneling architecture.
+    *   **Architecture Diagram:** Show the Cloud Architecture (Extension talking to Render.com, Render.com talking to Gemini API).
 4.  **Implementation (15 Pages):** Paste code snippets from `main.py`, `ai_engine.py`, and `content.js`. Explain what each function does mathematically/logically. Explain FastAPI routing and REST concepts.
 5.  **Software Testing (10 Pages):** Write out test cases. 
     *   *Test 1:* Webhook Validation failure (403 error handled).

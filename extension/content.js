@@ -25,20 +25,35 @@ function createDulaWidget() {
                 <div class="comment-body markdown-body">
                     <!-- State 1: Setup -->
                     <div id="dula-state-1">
-                        <p><strong>Optimize Review Request</strong></p>
-                        <select id="dula-review-type" class="form-select width-full mb-2">
-                            <option value="Perform a comprehensive security and structural code review.">Deep Structural & Security Review</option>
-                            <option value="Check for memory leaks and time complexity performance.">Performance & Optimization Review</option>
-                            <option value="Check for architectural alignment and clean code principles.">Architectural Alignment Review</option>
-                            <option value="custom">Add your own review instruction...</option>
+                        <p style="margin-bottom: 4px;"><strong>1. Select Review Intent</strong></p>
+                        <select id="dula-review-intent" class="form-select width-full mb-3">
+                            <option value="General Improvement">General Improvement</option>
+                            <option value="Production Readiness">Production Readiness</option>
+                            <option value="Interview Prep">Interview Preparation</option>
+                            <option value="Security Audit">Strict Security Audit</option>
                         </select>
-                        <input type="text" id="dula-custom-instruction" class="form-control width-full mb-2" placeholder="E.g., Check for SQL injection vulnerabilities" style="display: none;">
+                        
+                        <p style="margin-bottom: 4px;"><strong>2. Select Focus Categories</strong></p>
+                        <div id="dula-categories" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; font-size: 13px;">
+                            <label><input type="checkbox" value="Security" checked> Security</label>
+                            <label><input type="checkbox" value="Performance" checked> Performance</label>
+                            <label><input type="checkbox" value="Code Quality" checked> Code Quality</label>
+                            <label><input type="checkbox" value="Architecture" checked> Architecture</label>
+                            <label><input type="checkbox" value="Bugs" checked> Bugs</label>
+                            <label><input type="checkbox" value="Testing"> Testing</label>
+                            <label><input type="checkbox" value="DevOps"> DevOps</label>
+                        </div>
+                        
+                        <input type="text" id="dula-custom-instruction" class="form-control width-full mb-3" placeholder="Additional instructions (optional)...">
                         <button id="dula-trigger-btn" class="btn btn-primary">Synthesize Enhanced Prompt</button>
                     </div>
                     
                     <!-- State 2: Loading Layer 1 -->
                     <div id="dula-state-2" style="display: none;">
-                        <p>⏳ <strong>Layer 1 Analyzing Context:</strong> Parsing repository tree and tracking semantic dependencies...</p>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="dula-spinner"></div>
+                            <p style="margin: 0;"><strong>Layer 1 Analyzing Context:</strong> Parsing repository tree and semantics...</p>
+                        </div>
                     </div>
 
                     <!-- State 3: Editable Confirmation -->
@@ -51,7 +66,10 @@ function createDulaWidget() {
 
                     <!-- State 4: Loading Layer 2 -->
                     <div id="dula-state-4" style="display: none;">
-                        <p>🚀 <strong>Layer 2 Executing:</strong> Running deep deterministic analysis. Generating final structured Markdown report...</p>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="dula-spinner"></div>
+                            <p style="margin: 0;"><strong>Layer 2 Executing:</strong> Running deep deterministic analysis. Generating final report...</p>
+                        </div>
                     </div>
                     
                     <!-- State 5: Success -->
@@ -87,11 +105,7 @@ function injectDulaWidget() {
     document.getElementById('dula-cancel-btn').addEventListener('click', () => switchState(1));
     document.getElementById('dula-reset-btn').addEventListener('click', () => switchState(1));
 
-    // Toggle custom input visibility
-    document.getElementById('dula-review-type').addEventListener('change', (e) => {
-        const customInput = document.getElementById('dula-custom-instruction');
-        customInput.style.display = (e.target.value === 'custom') ? 'block' : 'none';
-    });
+    // Removed the display toggle logic since custom instruction is now just an optional input
 }
 
 function switchState(stateNumber) {
@@ -112,16 +126,21 @@ function getPrContext() {
 
 async function handleTriggerLayer1() {
     switchState(2);
-    let instruction = document.getElementById('dula-review-type').value;
-    if (instruction === 'custom') {
-        instruction = document.getElementById('dula-custom-instruction').value.trim();
-        if (!instruction) instruction = "Perform a general structural code review.";
-    }
+    const intent = document.getElementById('dula-review-intent').value;
+    
+    // Gather checked categories
+    const categoryCheckboxes = document.querySelectorAll('#dula-categories input[type="checkbox"]:checked');
+    const categories = Array.from(categoryCheckboxes).map(cb => cb.value);
+    const categoryString = categories.length > 0 ? categories.join(', ') : 'all';
+    
+    let extra = document.getElementById('dula-custom-instruction').value.trim();
+    
+    let instruction = `Intent: ${intent}. Categories: ${categoryString}.`;
+    if (extra) instruction += ` Additional focus: ${extra}`;
     const ctx = getPrContext();
 
     try {
-        // Must match your backend URL. If testing locally, make sure Uvicorn is running.
-        const response = await fetch('http://localhost:8000/api/layer1', {
+        const response = await fetch('https://code-review-bot-5kl5.onrender.com/api/layer1', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -150,7 +169,7 @@ async function handleTriggerLayer2() {
     const ctx = getPrContext();
 
     try {
-        const response = await fetch('http://localhost:8000/api/layer2', {
+        const response = await fetch('https://code-review-bot-5kl5.onrender.com/api/layer2', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -160,7 +179,10 @@ async function handleTriggerLayer2() {
             })
         });
 
-        if (!response.ok) throw new Error("API Failed");
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`API Failed: ${response.status} - ${errText}`);
+        }
 
         // Success
         switchState(5);
@@ -169,7 +191,7 @@ async function handleTriggerLayer2() {
 
     } catch (e) {
         console.error(e);
-        alert("DULA Layer 2 Failed to connect to backend.");
+        alert("DULA Layer 2 Error: " + e.message);
         switchState(3); // Go back to editable state
     }
 }

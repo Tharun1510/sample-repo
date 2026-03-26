@@ -52,7 +52,7 @@ def process_review_request(repo_full_name: str, pr_number: int, user_instruction
     # 1. Post a reaction/comment to indicate we're working
     gh_client.post_comment(
         repo_full_name, pr_number, 
-        "⏳ **DULA Layer 1 Triggered:** Mapping repository semantics and extracting context. Please wait..."
+        "⏳ **DULA Layer 1 Triggered:** Parsing categories, user intent, and mapping repository semantics. Please wait..."
     )
     
     # 2. Get the PR diff
@@ -86,7 +86,7 @@ def process_review_request(repo_full_name: str, pr_number: int, user_instruction
     
     # 7. Post the enhanced prompt to the PR asking for confirmation
     message = f"""### 🤖 DULA Layer 1: Context Analysis Complete
-I have mapped the repository. Based on the `{user_instruction}` instruction and the project structure, I have engineered the following comprehensive instruction set for the downstream Code Review LLM:
+I have parsed your intent directly into the prompt matrix. Based on the `{user_instruction}` instruction and the project structure, I have engineered the following master instruction set for the downstream Code Review LLM:
 
 ---
 > {enhanced_prompt.replace('\n', '\n> ')}
@@ -161,7 +161,7 @@ async def github_webhook(request: Request, background_tasks: BackgroundTasks):
         if comment_body.startswith("/review"):
             user_instruction = comment_body.replace("/review", "").strip()
             if not user_instruction:
-                 user_instruction = "Perform a general code review."
+                 user_instruction = "Perform a full structural review. Intent: general improvement. Categories: all."
             # Send to background task so webhook responds 200 immediately
             background_tasks.add_task(process_review_request, repo_full_name, pr_number, user_instruction)
             

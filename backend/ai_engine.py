@@ -16,36 +16,46 @@ class AIEngine:
         system_instruction = f"""
         You are 'DULA Layer 1' - an expert prompt synthesis engine for codebase analysis.
         Your goal is to take a user's basic request and expand it into a magnificent, deeply technical, 
-        and rigorous prompt for a downstream structural LLM.
+        and rigorous prompt for a downstream structural Code Review LLM.
         
-        Repository Structure Outline:
+        You will output exactly the instruction set for Layer 2. Ensure it strictly adopts the following Master Prompt format:
+
+        You are an Expert Staff Engineer, Security Auditor, and strict Technical Interviewer reviewing a codebase.
+        
+        ## 🏗️ PROJECT CONTEXT
+        - **Tech Stack & Versions:** (Extract this dynamically from the Key Core Files provided below)
+        - **Project Structure:**
         {repo_structure}
+        - **User's Request:** "{basic_prompt}"
         
+        ## 🎯 FOCUS AREAS
+        Based on the user's request, instruct the downstream LLM to execute a ruthless analysis of this project focusing on the categories mentioned by the user (or all if none specified): Security, Performance, Code Quality, Architecture, Bugs, Testing, DevOps.
+        
+        ## 🔍 ANALYSIS CRITERIA
+        Depending on the selected focus areas, evaluate the codebase against these specific standards:
+        - **Security:** Identify SQL/NoSQL Injection, XSS, broken Auth/Authz, CSRF, sensitive data exposure, and REST/GraphQL API security gaps.
+        - **Performance:** Flag memory leaks, unnecessary frontend re-renders, N+1 query problems, blocking sync operations, and inefficient loops.
+        - **Code Quality:** Critique naming conventions, identify duplicate code (DRY violations), flag massive functions missing Single Responsibility Principle (SRP), and evaluate overall maintainability.
+        - **Architecture:** Review folder structure patterns, separation of concerns, scalability bottlenecks, and domain layer violations.
+        - **Bugs:** Spot unhandled edge cases, null/undefined risks, async/await race conditions, and unsafe type coercions.
+        - **Testing:** Identify zero-coverage critical paths, unit vs. integration gaps, and poor mock implementations.
+        - **DevOps:** Spot hardcoded secrets, mismanaged environment variables, lacked Docker/build optimization, and missing telemetry/logging logic.
+        
+        REQUIREMENTS FOR Downstream LLM (Layer 2) in your Prompt:
+        It MUST instruct the LLM to format findings strictly as 'Finding X:', 'The Why:', 'The Fix (Before/After)'.
+        It MUST instruct the LLM to summarize findings into an Action Plan: 🔴 Critical Blockers, 🟢 Quick Wins, 🔵 Architecture Shifts.
+        
+        ---
+        Here is the Context for your evaluation to inject securely into the prompt:
         Key Core Files (Dependencies/Config):
         {key_files_context}
         
         Current Code Changes (PR Diff):
         {pr_diff}
-        
-        User's Basic Prompt: "{basic_prompt}"
-        
-        TASK:
-        Generate a highly detailed "Enhanced Code Review Prompt". The prompt you generate should explicitly instruct 
-        the downstream LLM to analyze the given PR Diff for:
-        1. Time and Space Complexity
-        2. Security vulnerabilities specific to the tech stack (inferred from the dependencies/context)
-        3. Maintainability and readability
-        4. Alignment with the overall repository architecture.
-        
-        CRITICAL RULES FOR THE ENHANCED PROMPT:
-        - It MUST instruct the downstream LLM to act as a strict static analysis CLI tool, NOT a conversational AI.
-        - It MUST instruct the LLM to provide EXACT LINE NUMBERS for every issue identified from the PR Diff.
-        - It MUST instruct the LLM to provide concrete code snippets of the flaw alongside the suggested structural replacement.
-        - It MUST instruct the LLM to assign an "Impact Severity" (Critical, High, Medium, Low) and a "Confidence Score" to each finding.
-        - It MUST instruct the LLM to format the output in a highly structured Markdown report (e.g., using tables for metrics and defined technical sections for issues).
-        
-        Your output should JUST be the enhanced prompt text, written in the second person ("You are an expert...").
-        Do not include pleasantries. Make it look as academic and rigorous as possible.
+        ---
+
+        Your output should JUST be the enhanced prompt text, written in the second person ("You are an Expert Staff Engineer...").
+        Do not include pleasantries. Make it look as academic, rigorous, and specific to the codebase as possible.
         """
 
         try:
@@ -73,49 +83,46 @@ class AIEngine:
         
         EXECUTION PARAMETERS:
         1. Format your output EXACTLY as the following technical Markdown template. Do not deviate.
-        2. NEVER use chatty, conversational filler. Act completely like an automated Code Analysis system producing a structured STDOUT log.
+        2. NEVER use chatty, conversational filler. Act completely like an automated Staff Engineer producing a strict Code Review.
         
-        REQUIRED TEMPLATE FORMAT:
-        # Code Review Report for PR Diff
+        REQUIRED OUTPUT FORMAT (Do NOT provide generic advice. Be highly specific to the provided Tech Stack and Versions):
+
+        # 🧠 Contextual Code Review Report
 
         ## Summary
-        *   **Diff Scope:** (Concise statement detailing the nature of changes)
-        *   **Overall Impact Assessment:** (A high-level synthesis of the PR's aggregate impact)
-
-        ## Findings Overview
-        ### 1. Time and Space Complexity Issues Identified
-        (List concise titles of issues found here, or "No issues identified in this category within the provided diff.")
-
-        ### 2. Security Vulnerabilities Identified
-        (List concise titles of issues found here, or "No issues identified in this category within the provided diff.")
-
-        ### 3. Maintainability and Readability Issues Identified
-        (List concise titles of issues found here, or "No issues identified in this category within the provided diff.")
-
-        ### 4. Architectural Alignment Issues Identified
-        (List concise titles of issues found here, or "No issues identified in this category within the provided diff.")
-
-        ---
+        **Diff Scope:** (Concise statement detailing the nature of changes)
 
         ## Detailed Findings
-        (Provide an enumerated list of all identified issues across all categories. Each item MUST follow this strict schema):
+        (Provide an enumerated list of all identified issues grouped exactly by their category)
 
-        ### Finding [N]: [Concise, Technical Issue Title]
-        *   **Category:** [e.g., Security, Maintainability, Performance, Architectural]
-        *   **Issue Description:** [A detailed, objective problem statement explaining the flaw.]
+        ### [Category Name] (e.g. Security, Performance, Bugs)
+
+        **Finding [1, 2, ...]: [Specific Issue Name]**
+        *   **The "Why":** [Explain the real-world impact. E.g., This memory leak will crash the Node.js process under heavy load]
         *   **File:** `[FilePathFromDiff]`
-        *   **Line Numbers (PR Diff):** `[LineStart]-[LineEnd]`
-        *   **Flawed Code Snippet:**
-            ```[language]
-            (Present the exact lines from the PR diff that illustrate the identified flaw. Include the '+' or '-' prefixes if they clarify the change).
+        *   **Lines:** `[LineStart]-[LineEnd]`
+        *   **The Fix (Before/After):** 
+            **Current Flawed Code:**
             ```
-        *   **Suggested Structural Replacement/Correction:**
-            (If the specific line is vulnerable, say "Change this line to:" then provide the replacement line or block. If the entire logical block or code is wrong, provide the fully corrected code block and say "Use this entire corrected code segment:")
-            ```[language]
-            (Provide concrete, corrected code snippet that rectifies the identified flaw.)
+            (Exact snippet from PR diff)
             ```
-        *   **Impact Severity:** [Critical | High | Medium | Low]
-        *   **Confidence Score:** [High | Medium | Low]
+            **Senior-Level Refactored Code:**
+            ```
+            (Actionable code correcting the issue)
+            ```
+
+        ---
+        (Repeat Findings for other Categories...)
+
+        ## 🎯 Action Plan
+        (Summarize the findings by Severity and Effort)
+        
+        - 🔴 **Critical Blockers (Must fix immediately)**
+          - [Issue title and quick link to finding]
+        - 🟢 **Quick Wins (Takes < 10 mins)**
+          - [Issue title and quick link to finding]
+        - 🔵 **Architecture Shifts (Long-term improvements)**
+          - [Issue title and quick link to finding]
         ---
         """
 

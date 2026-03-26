@@ -34,3 +34,19 @@
         border: 1px solid #30363d;
     }
 }
+
+/* Spinner Animation */
+.dula-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(147, 51, 234, 0.3);
+    border-radius: 50%;
+    border-top-color: #9333ea;
+    animation: dula-spin 1s ease-in-out infinite;
+}
+
+@keyframes dula-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
