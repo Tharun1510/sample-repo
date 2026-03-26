@@ -1,17 +1,87 @@
-/* DULA Advanced Timeline Widget Styling */
-.dula-glow-box {
-    border: 1px solid #9333ea !important;
-    box-shadow: 0 0 10px rgba(147, 51, 234, 0.15);
-    transition: box-shadow 0.3s ease;
+/* Premium Widget Styling */
+.dula-premium-card {
+    border: 1px solid #e1e4e8 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    overflow: hidden;
+    background-color: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.dula-glow-box:hover {
-    box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);
+.dula-premium-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12) !important;
 }
 
-.dula-header {
-    background-color: rgba(147, 51, 234, 0.05) !important;
-    border-bottom: 1px solid #e5e7eb !important;
+.dula-premium-header {
+    background: linear-gradient(135deg, #1f2328 0%, #3a3f47 100%) !important;
+    padding: 12px 16px !important;
+    border-bottom: none !important;
+}
+
+.dula-premium-input {
+    border-radius: 8px !important;
+    transition: all 0.2s ease;
+}
+.dula-premium-input:focus {
+    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.3) !important;
+    border-color: #9333ea !important;
+}
+
+.dula-run-btn {
+    background-color: #9333ea !important;
+    border-color: #9333ea !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    font-weight: 600 !important;
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+.dula-run-btn:hover {
+    background-color: #7e22ce !important;
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(147, 51, 234, 0.4);
+}
+.dula-run-btn:active {
+    transform: scale(0.98);
+}
+
+/* Category Chips */
+.dula-chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.dula-chip {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: #57606a;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+    user-select: none;
+    display: flex;
+    align-items: center;
+}
+
+.dula-chip:hover {
+    background-color: #e5e7eb;
+}
+
+/* Hide actual checkbox but trigger state */
+.dula-chip input[type="checkbox"] {
+    display: none;
+}
+
+.dula-chip:has(input:checked) {
+    background-color: #9333ea;
+    color: #ffffff;
+    border-color: #9333ea;
+    box-shadow: 0 2px 4px rgba(147, 51, 234, 0.3);
 }
 
 /* Make sure the text area looks like code */
@@ -24,8 +94,23 @@
 
 /* Dark mode overrides (GitHub auto-switches based on OS, but specific DULA elements need tweaks) */
 @media (prefers-color-scheme: dark) {
-    .dula-header {
-        border-bottom: 1px solid #30363d !important;
+    .dula-premium-card {
+        background-color: #0d1117 !important;
+        border-color: #30363d !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+    }
+    .dula-chip {
+        background-color: #21262d;
+        color: #c9d1d9;
+        border-color: #30363d;
+    }
+    .dula-chip:hover {
+        background-color: #30363d;
+    }
+    .dula-chip:has(input:checked) {
+        background-color: #9333ea;
+        color: #ffffff;
+        border-color: #9333ea;
     }
 
     #dula-prompt-editor {

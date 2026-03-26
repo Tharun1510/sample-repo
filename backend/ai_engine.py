@@ -42,8 +42,10 @@ class AIEngine:
         - **DevOps:** Spot hardcoded secrets, mismanaged environment variables, lacked Docker/build optimization, and missing telemetry/logging logic.
         
         REQUIREMENTS FOR Downstream LLM (Layer 2) in your Prompt:
-        It MUST instruct the LLM to format findings strictly as 'Finding X:', 'The Why:', 'The Fix (Before/After)'.
-        It MUST instruct the LLM to summarize findings into an Action Plan: 🔴 Critical Blockers, 🟢 Quick Wins, 🔵 Architecture Shifts.
+        It MUST instruct the LLM to use a softer, professional tone (e.g. use terms like 'Observation' and 'Recommendation' instead of 'Flaw' or 'Wrong').
+        It MUST instruct the LLM to format every finding strictly wrapped in GitHub Markdown `<details>` and `<summary>` tags for a collapsible UI.
+        It MUST instruct the LLM to include '⏱ Estimated Fix Time', '⚠ Real-world Impact', and a visual 'Confidence Meter (e.g. ████████ 90%)'.
+        It MUST instruct the LLM to summarize findings into an Action Plan: 🔥 Fix First, ⚡ Improve Next, 📦 Refactor Later.
         
         ---
         Here is the Context for your evaluation to inject securely into the prompt:
@@ -87,41 +89,58 @@ class AIEngine:
         
         REQUIRED OUTPUT FORMAT (Do NOT provide generic advice. Be highly specific to the provided Tech Stack and Versions):
 
-        # 🧠 Contextual Code Review Report
+        # 🧠 Code Review Summary
+        
+        (Generate a professional Markdown Table summarizing the numerical count of issues found, grouped by Category and Severity)
 
-        ## Summary
-        **Diff Scope:** (Concise statement detailing the nature of changes)
+        ```mermaid
+        pie title Issues by Category
+        "[Category 1]" : [Count]
+        "[Category 2]" : [Count]
+        ```
 
         ## Detailed Findings
-        (Provide an enumerated list of all identified issues grouped exactly by their category)
+        (Provide findings grouped exactly by their category. Every finding MUST be collapsible using `<details>` and `<summary>` tags.)
 
-        ### [Category Name] (e.g. Security, Performance, Bugs)
+        ### [Category Name] (e.g. 🛡 Security, ⚡ Performance, 🧹 Code Quality)
 
-        **Finding [1, 2, ...]: [Specific Issue Name]**
-        *   **The "Why":** [Explain the real-world impact. E.g., This memory leak will crash the Node.js process under heavy load]
-        *   **File:** `[FilePathFromDiff]`
-        *   **Lines:** `[LineStart]-[LineEnd]`
-        *   **The Fix (Before/After):** 
-            **Current Flawed Code:**
-            ```
-            (Exact snippet from PR diff)
-            ```
-            **Senior-Level Refactored Code:**
-            ```
-            (Actionable code correcting the issue)
-            ```
-
+        <details>
+        <summary>🔴 Finding: [Specific Issue Name]</summary>
+        
+        *   **File:** `[FilePathFromDiff]` (Lines `[Start]-[End]`)
+        *   **⏱ Estimated Fix Time:** [e.g. 5 mins]
+        *   **Confidence:** [e.g. ████████ 90%]
+        
+        **🔍 Observation:** 
+        [Explain what the code is currently doing without being overly judgmental.]
+        
+        **⚠ Real-world Impact:** 
+        [Explain why this matters in production or architecture.]
+        
+        **💡 Recommendation:** 
+        [Explain the fix softly and suggestively.]
+        
+        **Current Code:**
+        ```
+        (Exact snippet from PR diff)
+        ```
+        **Refactored Code:**
+        ```
+        (Actionable code correcting the issue)
+        ```
+        </details>
+        
         ---
-        (Repeat Findings for other Categories...)
+        (Repeat `<details>` blocks for other findings...)
 
         ## 🎯 Action Plan
         (Summarize the findings by Severity and Effort)
         
-        - 🔴 **Critical Blockers (Must fix immediately)**
+        - 🔥 **Fix First (High Impact, Low Effort)**
           - [Issue title and quick link to finding]
-        - 🟢 **Quick Wins (Takes < 10 mins)**
+        - ⚡ **Improve Next (Medium Impact)**
           - [Issue title and quick link to finding]
-        - 🔵 **Architecture Shifts (Long-term improvements)**
+        - 📦 **Refactor Later (Low Priority)**
           - [Issue title and quick link to finding]
         ---
         """

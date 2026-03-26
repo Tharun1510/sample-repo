@@ -12,70 +12,98 @@ function createDulaWidget() {
             <a class="d-none d-md-block" href="#" style="position: absolute; left: 0; top: 0;">
                 <img class="avatar avatar-user" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="40" height="40" alt="DULA" style="border-radius: 50%;">
             </a>
-            <div class="timeline-comment color-bg-default dula-glow-box" style="margin-left: 56px;">
-                <div class="timeline-comment-header clearfix dula-header">
+            <div class="timeline-comment color-bg-default dula-premium-card" style="margin-left: 56px;">
+                <div class="timeline-comment-header clearfix dula-premium-header">
                 <h3 class="timeline-comment-header-text f5 text-normal">
+                    <span style="font-size: 16px; margin-right: 6px;">🧠</span> 
                     <strong class="css-truncate">
-                       <span class="css-truncate-target" style="color: #9333ea;">🧠 DULA Bot</span>
+                       <span class="css-truncate-target" style="color: #ffffff;">Code Review AI</span>
                     </strong>
-                    native analysis agent
+                    <span style="float: right; font-size: 12px; color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 12px;">Project Dashboard</span>
                 </h3>
             </div>
             <div class="edit-comment-hide">
-                <div class="comment-body markdown-body">
+                <div class="comment-body markdown-body" style="padding: 20px;">
                     <!-- State 1: Setup -->
                     <div id="dula-state-1">
-                        <p style="margin-bottom: 4px;"><strong>1. Select Review Intent</strong></p>
-                        <select id="dula-review-intent" class="form-select width-full mb-3">
-                            <option value="General Improvement">General Improvement</option>
-                            <option value="Production Readiness">Production Readiness</option>
-                            <option value="Interview Prep">Interview Preparation</option>
-                            <option value="Security Audit">Strict Security Audit</option>
-                        </select>
-                        
-                        <p style="margin-bottom: 4px;"><strong>2. Select Focus Categories</strong></p>
-                        <div id="dula-categories" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; font-size: 13px;">
-                            <label><input type="checkbox" value="Security" checked> Security</label>
-                            <label><input type="checkbox" value="Performance" checked> Performance</label>
-                            <label><input type="checkbox" value="Code Quality" checked> Code Quality</label>
-                            <label><input type="checkbox" value="Architecture" checked> Architecture</label>
-                            <label><input type="checkbox" value="Bugs" checked> Bugs</label>
-                            <label><input type="checkbox" value="Testing"> Testing</label>
-                            <label><input type="checkbox" value="DevOps"> DevOps</label>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                            <!-- LEFT PANEL -->
+                            <div style="flex: 2; min-width: 300px;">
+                                <h4 style="margin-top: 0; font-size: 14px; color: #57606a;">Review Prompt</h4>
+                                <input type="text" id="dula-custom-instruction" class="form-control width-full mb-3 dula-premium-input" placeholder="e.g., Check for SQL injection vulnerabilities, or leave blank for a general review...">
+                                
+                                <button id="dula-expand-btn" class="btn btn-sm btn-outline mb-3" style="border-radius: 12px; font-size: 12px; box-shadow: none;">⚙ Expand Advanced Options</button>
+                                
+                                <!-- ADVANCED OPTIONS (Hidden by default) -->
+                                <div id="dula-advanced-options" style="display: none; padding: 12px; border: 1px dashed #d0d7de; border-radius: 8px; margin-bottom: 16px; background: rgba(255,255,255,0.5);">
+                                    <h4 style="margin-top: 0; font-size: 14px; color: #57606a;">Review Intent</h4>
+                                    <select id="dula-review-intent" class="form-select width-full mb-3 dula-premium-input">
+                                        <option value="General Improvement">General Improvement</option>
+                                        <option value="Production Readiness">Production Readiness</option>
+                                        <option value="Interview Prep">Interview Preparation</option>
+                                        <option value="Security Audit">Strict Security Audit</option>
+                                    </select>
+                                    
+                                    <h4 style="font-size: 14px; color: #57606a; margin-top: 16px;">Focus Categories</h4>
+                                    <div id="dula-categories" class="dula-chip-group">
+                                        <label class="dula-chip"><input type="checkbox" value="Security" checked> 🛡 Security</label>
+                                        <label class="dula-chip"><input type="checkbox" value="Performance" checked> ⚡ Performance</label>
+                                        <label class="dula-chip"><input type="checkbox" value="Code Quality" checked> 🧹 Quality</label>
+                                        <label class="dula-chip"><input type="checkbox" value="Architecture" checked> 🧱 Architecture</label>
+                                        <label class="dula-chip"><input type="checkbox" value="Bugs" checked> 🐞 Bugs</label>
+                                        <label class="dula-chip"><input type="checkbox" value="Testing"> 🧪 Testing</label>
+                                        <label class="dula-chip"><input type="checkbox" value="DevOps"> 🚀 DevOps</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- RIGHT PANEL (SUMMARY INFO) -->
+                            <div style="flex: 1; min-width: 200px; padding: 16px; background: rgba(147, 51, 234, 0.05); border-radius: 8px; border: 1px solid rgba(147, 51, 234, 0.1); display: flex; flex-direction: column; justify-content: center; text-align: center;">
+                                <div style="font-size: 32px; margin-bottom: 8px;">🚀</div>
+                                <h4 style="font-size: 14px; margin-bottom: 4px; color: #9333ea;">Ready for Analysis</h4>
+                                <p style="font-size: 12px; color: #57606a; margin: 0;">We will automatically extract Project Context & Dependencies.</p>
+                            </div>
                         </div>
                         
-                        <input type="text" id="dula-custom-instruction" class="form-control width-full mb-3" placeholder="Additional instructions (optional)...">
-                        <button id="dula-trigger-btn" class="btn btn-primary">Synthesize Enhanced Prompt</button>
+                        <div style="margin-top: 20px; border-top: 1px solid #e1e4e8; padding-top: 16px; text-align: right;">
+                             <button id="dula-trigger-btn" class="btn btn-primary dula-run-btn">Execute Analysis</button>
+                        </div>
                     </div>
                     
                     <!-- State 2: Loading Layer 1 -->
                     <div id="dula-state-2" style="display: none;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 20px 0;">
                             <div class="dula-spinner"></div>
-                            <p style="margin: 0;"><strong>Layer 1 Analyzing Context:</strong> Parsing repository tree and semantics...</p>
+                            <p style="margin: 0; font-size: 14px;"><strong>Layer 1 Analyzing Context:</strong> Parsing repository tree and semantics...</p>
                         </div>
                     </div>
 
                     <!-- State 3: Editable Confirmation -->
                     <div id="dula-state-3" style="display: none;">
-                        <p><strong>Layer 1 Context Synthesis Complete.</strong> You may edit the constraint matrix before final execution:</p>
-                        <textarea id="dula-prompt-editor" class="form-control width-full mb-2" style="height: 250px; font-family: monospace; font-size: 12px;"></textarea>
-                        <button id="dula-confirm-btn" class="btn btn-primary">Confirm and Execute Layer 2</button>
-                        <button id="dula-cancel-btn" class="btn btn-outline float-right">Cancel</button>
+                        <h4 style="margin-top: 0; font-size: 14px; color: #57606a;">Layer 1 Context Synthesis Complete</h4>
+                        <textarea id="dula-prompt-editor" class="form-control width-full mb-3" style="height: 200px; font-family: 'Courier New', monospace; font-size: 12px;"></textarea>
+                        <div style="text-align: right;">
+                             <button id="dula-cancel-btn" class="btn btn-outline" style="margin-right: 8px;">Cancel</button>
+                             <button id="dula-confirm-btn" class="btn btn-primary dula-run-btn">⚡ Run Layer 2 Code Review</button>
+                        </div>
                     </div>
 
                     <!-- State 4: Loading Layer 2 -->
                     <div id="dula-state-4" style="display: none;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 20px 0;">
                             <div class="dula-spinner"></div>
-                            <p style="margin: 0;"><strong>Layer 2 Executing:</strong> Running deep deterministic analysis. Generating final report...</p>
+                            <p style="margin: 0; font-size: 14px;"><strong>Layer 2 Executing:</strong> Running deep deterministic analysis. Generating final report...</p>
                         </div>
                     </div>
                     
                     <!-- State 5: Success -->
                     <div id="dula-state-5" style="display: none;">
-                        <p>✅ <strong>Analysis Completed:</strong> The report has been successfully appended to the timeline.</p>
-                        <button id="dula-reset-btn" class="btn btn-sm">Start New Review</button>
+                        <div style="padding: 20px 0; text-align: center;">
+                            <h3 style="color: #2da44e; margin-bottom: 8px;">✅ Analysis Successfully Placed</h3>
+                            <p style="color: #57606a; font-size: 13px; margin-bottom: 8px;">The structural review report has been appended to the PR timeline.</p>
+                            <p style="color: #0969da; font-size: 12px; margin-bottom: 16px; font-weight: bold;">Please refresh the page to view the AI Code Review comment.</p>
+                            <button id="dula-reset-btn" class="btn btn-sm">Start New Review</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -104,8 +132,13 @@ function injectDulaWidget() {
     document.getElementById('dula-confirm-btn').addEventListener('click', handleTriggerLayer2);
     document.getElementById('dula-cancel-btn').addEventListener('click', () => switchState(1));
     document.getElementById('dula-reset-btn').addEventListener('click', () => switchState(1));
-
-    // Removed the display toggle logic since custom instruction is now just an optional input
+    
+    document.getElementById('dula-expand-btn').addEventListener('click', () => {
+        const advOptions = document.getElementById('dula-advanced-options');
+        const isHidden = advOptions.style.display === 'none';
+        advOptions.style.display = isHidden ? 'block' : 'none';
+        document.getElementById('dula-expand-btn').innerText = isHidden ? '⬆ Collapse Advanced Options' : '⚙ Expand Advanced Options';
+    });
 }
 
 function switchState(stateNumber) {
@@ -186,8 +219,7 @@ async function handleTriggerLayer2() {
 
         // Success
         switchState(5);
-        // Reload page to show the newly posted comment
-        setTimeout(() => window.location.reload(), 1500);
+        // We removed the forced reload so the user doesn't lose their train of thought.
 
     } catch (e) {
         console.error(e);
