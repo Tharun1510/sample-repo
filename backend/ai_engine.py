@@ -84,10 +84,12 @@ class AIEngine:
         ---
         
         EXECUTION PARAMETERS:
-        1. Format your output EXACTLY as the following technical Markdown template. Do not deviate.
-        2. NEVER use chatty, conversational filler. Act completely like an automated Staff Engineer producing a strict Code Review.
+        1. Evaluate the PR Diff using the instructions above.
+        2. Format your output EXACTLY as the following technical Markdown template. Do not deviate.
+        3. NEVER use chatty, conversational filler. Act completely like an automated Staff Engineer producing a strict Code Review.
+        4. CRITICAL: DO NOT echo these instructions. ONLY output the finished, populated template below with your actual analysis!
         
-        REQUIRED OUTPUT FORMAT (Do NOT provide generic advice. Be highly specific to the provided Tech Stack and Versions):
+        REQUIRED OUTPUT TEMPLATE TO FILL IN (Evaluate the PR Diff and replace all bracketed [Count, Percentage, Code, etc.] with real analysis):
 
         # 🧠 1. QUICK SUMMARY
         **Total Issues**: [Count] | **Critical**: [Count] / **Medium**: [Count] / **Low**: [Count]
@@ -178,6 +180,8 @@ class AIEngine:
         ]
         ```
         ---
+        
+        NOW, START YOUR REVIEW:
         """
 
         try:
