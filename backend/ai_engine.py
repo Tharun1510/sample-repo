@@ -89,59 +89,94 @@ class AIEngine:
         
         REQUIRED OUTPUT FORMAT (Do NOT provide generic advice. Be highly specific to the provided Tech Stack and Versions):
 
-        # 🧠 Code Review Summary
-        
-        (Generate a professional Markdown Table summarizing the numerical count of issues found, grouped by Category and Severity)
+        # 🧠 1. QUICK SUMMARY
+        **Total Issues**: [Count] | **Critical**: [Count] / **Medium**: [Count] / **Low**: [Count]
+        **Code Health Status**: [Excellent / Good / Needs Work / Critical]
 
+        # 📋 2. ISSUE SUMMARY TABLE
+        | Category | Issues | Critical | Medium | Low |
+        | :--- | :--- | :--- | :--- | :--- |
+        | Security | 1 | 1 | 0 | 0 |
+        (Populate this table based on your findings below)
+
+        # 📊 3. VISUALIZATIONS
+        
+        **Issue Distribution**
         ```mermaid
         pie title Issues by Category
-        "[Category 1]" : [Count]
-        "[Category 2]" : [Count]
+        "Security": 1
+        "Performance": 1
+        "Bugs": 0
         ```
-
-        ## Detailed Findings
-        (Provide findings grouped exactly by their category. Every finding MUST be collapsible using `<details>` and `<summary>` tags.)
-
-        ### [Category Name] (e.g. 🛡 Security, ⚡ Performance, 🧹 Code Quality)
-
-        <details>
-        <summary>🔴 Finding: [Specific Issue Name]</summary>
         
-        *   **File:** `[FilePathFromDiff]` (Lines `[Start]-[End]`)
-        *   **⏱ Estimated Fix Time:** [e.g. 5 mins]
-        *   **Confidence:** [e.g. ████████ 90%]
-        
+        **Severity Breakdown**
+        High   [█████░░░░░] [Count]
+        Medium [████████░░] [Count]
+        Low    [██░░░░░░░░] [Count]
+
+        **Code Health Score**
+        [█████████░] 90%
+
+        # ⚡ 4. DETAILED FINDINGS
+
+        (Group issues strictly by their category. Every finding MUST use the exact structure below, utilizing `<details>` for hiding explanations and fixes).
+
+        ### [Category Name] (e.g. 🛡 Security)
+
+        🔹 **[Issue Title]**
+        *   **Severity:** [🔴 High / 🟡 Medium / 🟢 Low]
+        *   **Impact:** [High / Medium / Low]
+        *   **Effort:** [High / Medium / Low]
+        *   **Confidence Score:** [████████░░ 80%]
+
         **🔍 Observation:** 
-        [Explain what the code is currently doing without being overly judgmental.]
+        [A very short, objective explanation of what the code is currently doing. Max 2 lines.]
         
-        **⚠ Real-world Impact:** 
-        [Explain why this matters in production or architecture.]
+        **⚠ Potential Impact:** 
+        [Why this matters in the real world. Max 2 lines.]
+
+        (CRITICAL: You MUST use the exact HTML `<details>` and `<summary>` tags below so the UI can hide these sections)
         
-        **💡 Recommendation:** 
-        [Explain the fix softly and suggestively.]
+        <details>
+        <summary>💡 Show Suggestion</summary>
+        [A soft, constructive recommendation on how to approach the fix. Be suggestive, not demanding.]
+        </details>
         
-        **Current Code:**
+        <details>
+        <summary>✨ Show Fix Code</summary>
+        **Current Flawed Code:**
         ```
         (Exact snippet from PR diff)
         ```
-        **Refactored Code:**
+        **Senior-Level Refactored Code:**
         ```
         (Actionable code correcting the issue)
         ```
         </details>
-        
-        ---
-        (Repeat `<details>` blocks for other findings...)
 
-        ## 🎯 Action Plan
-        (Summarize the findings by Severity and Effort)
+        ---
+        (Repeat for other findings...)
+
+        # 📋 5. DETAILED TABLE
+        | Issue | Category | Severity | Effort | Action |
+        | :--- | :--- | :--- | :--- | :--- |
+        | [Issue Title] | [Category] | [Severity] | [Effort] | [Suggested Action e.g. Fix Now / Improve] |
+
+        # 🎯 6. ACTION PLAN
         
         - 🔥 **Fix First (High Impact, Low Effort)**
-          - [Issue title and quick link to finding]
+          - [Issue title]
         - ⚡ **Improve Next (Medium Impact)**
-          - [Issue title and quick link to finding]
+          - [Issue title]
         - 📦 **Refactor Later (Low Priority)**
-          - [Issue title and quick link to finding]
+          - [Issue title]
+
+        # 📊 7. IMPACT vs EFFORT JSON DATA
+        ```json
+        [
+          {{ "issue": "Issue Name", "impact": "High", "effort": "Low" }}
+        ]
+        ```
         ---
         """
 
