@@ -32,7 +32,7 @@ function createDulaWidget() {
                                 <h4 style="margin-top: 0; font-size: 14px; color: #57606a;">Review Prompt</h4>
                                 <input type="text" id="dula-custom-instruction" class="form-control width-full mb-3 dula-premium-input" placeholder="e.g., Check for SQL injection vulnerabilities, or leave blank for a general review...">
                                 
-                                <button id="dula-expand-btn" class="btn btn-sm btn-outline mb-3" style="border-radius: 12px; font-size: 12px; box-shadow: none;">⚙ Expand Advanced Options</button>
+                                <button id="dula-expand-btn" class="btn btn-sm btn-outline mb-3" style="border-radius: 12px; font-size: 12px; box-shadow: none;">✨ Expand Prompt with AI</button>
                                 
                                 <!-- ADVANCED OPTIONS (Hidden by default) -->
                                 <div id="dula-advanced-options" style="display: none; padding: 12px; border: 1px dashed #d0d7de; border-radius: 8px; margin-bottom: 16px; background: rgba(255,255,255,0.5);">
@@ -137,7 +137,7 @@ function injectDulaWidget() {
         const advOptions = document.getElementById('dula-advanced-options');
         const isHidden = advOptions.style.display === 'none';
         advOptions.style.display = isHidden ? 'block' : 'none';
-        document.getElementById('dula-expand-btn').innerText = isHidden ? '⬆ Collapse Advanced Options' : '⚙ Expand Advanced Options';
+        document.getElementById('dula-expand-btn').innerText = isHidden ? '⬆ Collapse Prompt Options' : '✨ Expand Prompt with AI';
     });
 }
 

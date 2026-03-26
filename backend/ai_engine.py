@@ -119,42 +119,39 @@ class AIEngine:
         **Code Health Score**
         [█████████░] 90%
 
-        # ⚡ 4. DETAILED FINDINGS
+        # ⚡ 4. IN-DEPTH ANALYSIS
 
-        (Group issues strictly by their category. Every finding MUST use the exact structure below, utilizing `<details>` for hiding explanations and fixes).
+        (Group issues strictly by their category. Every finding MUST use the exact structure below. You MUST use literal HTML `<details>` and `<summary>` tags for the suggestions and fixes, or the layout will completely break!)
 
-        ### [Category Name] (e.g. 🛡 Security)
-
-        🔹 **[Issue Title]**
-        *   **Severity:** [🔴 High / 🟡 Medium / 🟢 Low]
-        *   **Impact:** [High / Medium / Low]
-        *   **Effort:** [High / Medium / Low]
-        *   **Confidence Score:** [████████░░ 80%]
-
-        **🔍 Observation:** 
-        [A very short, objective explanation of what the code is currently doing. Max 2 lines.]
+        ### 🛡 [Category Name]
         
-        **⚠ Potential Impact:** 
-        [Why this matters in the real world. Max 2 lines.]
-
-        (CRITICAL: You MUST use the exact HTML `<details>` and `<summary>` tags below so the UI can hide these sections)
-        
-        <details>
-        <summary>💡 Show Suggestion</summary>
-        [A soft, constructive recommendation on how to approach the fix. Be suggestive, not demanding.]
-        </details>
-        
-        <details>
-        <summary>✨ Show Fix Code</summary>
-        **Current Flawed Code:**
-        ```
-        (Exact snippet from PR diff)
-        ```
-        **Senior-Level Refactored Code:**
-        ```
-        (Actionable code correcting the issue)
-        ```
-        </details>
+        > **🔹 [Issue Title]**
+        > **Severity:** [🔴 High / 🟡 Medium / 🟢 Low] | **Impact:** [High / Medium / Low] | **Effort:** [High / Medium / Low]
+        > **Confidence:** [████████░░ 80%]
+        > 
+        > **🔍 Observation:** [A precise, objective explanation of what the code is currently doing. Max 2 lines. Verify against Tech Stack/Versions]
+        > 
+        > **⚠ Potential Impact:** [Why this matters in the real world. Max 2 lines.]
+        >
+        > <details>
+        > <summary><b>💡 Click to view Suggestion</b></summary>
+        > 
+        > [A soft, constructive recommendation on how to approach the fix. Be suggestive, not demanding.]
+        > </details>
+        > 
+        > <details>
+        > <summary><b>✨ Click to view Refactored Code</b></summary>
+        > 
+        > **Current Flawed Code:**
+        > ```javascript
+        > (Exact snippet from PR diff)
+        > ```
+        > 
+        > **Senior-Level Refactored Code:**
+        > ```javascript
+        > (Actionable code correcting the issue)
+        > ```
+        > </details>
 
         ---
         (Repeat for other findings...)
