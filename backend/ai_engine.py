@@ -7,7 +7,7 @@ class AIEngine:
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel("gemini-2.5-flash")
 
-    def layer_1_enhance_prompt(self, basic_prompt: str, repo_structure: str, key_files_context: str, pr_diff: str) -> str:
+    def layer_1_enhance_prompt(self, basic_prompt: str, repo_structure: str, key_files_context: str, pr_diff: str, deterministic_metrics: str = "") -> str:
         """
         Layer 1: The Context-Aware Interceptor.
         Takes the user's basic prompt and massive repository context to generate a highly
@@ -28,6 +28,10 @@ class AIEngine:
         {repo_structure}
         - **User's Request:** "{basic_prompt}"
         
+        ## 🧮 DETERMINISTIC METRIC SCORES
+        The following metrics have been pre-calculated using hardcoded static analysis algorithms. You MUST prioritize these findings in your review and mention them explicitly if they are problematic:
+        {deterministic_metrics}
+        
         ## 🎯 FOCUS AREAS
         Based on the user's request, instruct the downstream LLM to execute a ruthless analysis of this project focusing on the categories mentioned by the user (or all if none specified): Security, Performance, Code Quality, Architecture, Bugs, Testing, DevOps.
         
@@ -35,7 +39,7 @@ class AIEngine:
         Depending on the selected focus areas, evaluate the codebase against these specific standards:
         - **Security:** Identify SQL/NoSQL Injection, XSS, broken Auth/Authz, CSRF, sensitive data exposure, and REST/GraphQL API security gaps.
         - **Performance:** Flag memory leaks, unnecessary frontend re-renders, N+1 query problems, blocking sync operations, and inefficient loops.
-        - **Code Quality:** Critique naming conventions, identify duplicate code (DRY violations), flag massive functions missing Single Responsibility Principle (SRP), and evaluate overall maintainability.
+        - **Code Quality:** Critique naming conventions, identify duplicate code (DRY violations), flag massive functions missing Single Responsibility Principle (SRP). HEAVILY WEIGH the deterministic metrics provided above!
         - **Architecture:** Review folder structure patterns, separation of concerns, scalability bottlenecks, and domain layer violations.
         - **Bugs:** Spot unhandled edge cases, null/undefined risks, async/await race conditions, and unsafe type coercions.
         - **Testing:** Identify zero-coverage critical paths, unit vs. integration gaps, and poor mock implementations.

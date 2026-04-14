@@ -8,6 +8,7 @@ from dotenv import load_dotenv  # type: ignore
 
 from .github_client import GitHubClient  # type: ignore
 from .ai_engine import AIEngine  # type: ignore
+from .algorithms import calculate_levenshtein_distance, calculate_cyclomatic_complexity
 
 load_dotenv()
 
@@ -70,12 +71,24 @@ def process_review_request(repo_full_name: str, pr_number: int, user_instruction
          content = gh_client.get_file_content(repo_full_name, "requirements.txt")
          if content: key_context = "requirements.txt:\n" + content[:1000]
 
+    # 4.5. Compute Deterministic Metrics
+    complexity = calculate_cyclomatic_complexity(pr_diff)
+    similarity_score = 0.0
+    if key_context != "No specific dependency files configured.":
+         similarity_score = calculate_levenshtein_distance(pr_diff, key_context)
+         
+    deterministic_metrics = f"""
+    - **Cyclomatic Complexity Score**: {complexity} (If > 15, flag as High Risk / Bug Prone)
+    - **DRY Violation (Similarity to Key Context)**: {similarity_score}% (If > 80%, flag as duplicate code smell)
+    """
+
     # 5. Execute Layer 1: Context-Aware Enhancement
     enhanced_prompt = ai_engine.layer_1_enhance_prompt(
         basic_prompt=user_instruction,
         repo_structure=repo_structure,
         key_files_context=key_context,
-        pr_diff=pr_diff
+        pr_diff=pr_diff,
+        deterministic_metrics=deterministic_metrics
     )
     
     # 6. Store in-memory for confirmation
@@ -189,11 +202,22 @@ def api_layer1(req: Layer1Request):
          content = gh_client.get_file_content(req.repo_full_name, "requirements.txt")
          if content: key_context = "requirements.txt:\n" + content[:1000]
 
+    complexity = calculate_cyclomatic_complexity(pr_diff)
+    similarity_score = 0.0
+    if key_context != "No specific dependency files configured.":
+         similarity_score = calculate_levenshtein_distance(pr_diff, key_context)
+         
+    deterministic_metrics = f"""
+    - **Cyclomatic Complexity Score**: {complexity} (If > 15, flag as High Risk / Bug Prone)
+    - **DRY Violation (Similarity to Key Context)**: {similarity_score}% (If > 80%, flag as duplicate code smell)
+    """
+
     enhanced_prompt = ai_engine.layer_1_enhance_prompt(
         basic_prompt=req.instruction,
         repo_structure=repo_structure,
         key_files_context=key_context,
-        pr_diff=pr_diff
+        pr_diff=pr_diff,
+        deterministic_metrics=deterministic_metrics
     )
     return {"enhanced_prompt": enhanced_prompt}
 
