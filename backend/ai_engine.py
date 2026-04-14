@@ -96,7 +96,10 @@ class AIEngine:
         REQUIRED OUTPUT TEMPLATE TO FILL IN (Evaluate the PR Diff and replace all bracketed [Count, Percentage, Code, etc.] with real analysis):
 
         # 🧠 1. QUICK SUMMARY
-        **Total Issues**: [Count] | **Critical**: [Count] / **Medium**: [Count] / **Low**: [Count]
+        **Total Issues**: [Count] 
+         **Critical**: [Count] 
+         **Medium**: [Count] 
+        **Low**: [Count]
         **Code Health Status**: [Excellent / Good / Needs Work / Critical]
 
         # 📋 2. ISSUE SUMMARY TABLE
@@ -123,28 +126,30 @@ class AIEngine:
         **Code Health Score**
         [█████████░] 90%
 
-        # ⚡ 4. IN-DEPTH ANALYSIS
+        # 🧮 4. DETERMINISTIC ALGORITHMS SCORE
+        Before AI analysis, the DULA core engine performed objective mathematical analysis:
+        - **Cyclomatic Complexity (McCabe):** `[Insert Score Here]` *(> 15 is High Risk)*
+        - **DRY Duplication (Levenshtein):** `[Insert Percentage Here]%` *(> 80% is a DRY Violation)*
 
-        (Group issues strictly by their category. Every finding MUST use the exact structure below. You MUST use literal HTML `<details>` and `<summary>` tags for the suggestions and fixes, or the layout will completely break!)
+        # ⚡ 5. IN-DEPTH ANALYSIS
 
-        ### 🛡 [Category Name]
+        (Group issues strictly by their category. Every category MUST be wrapped in a master `<details>` tag so the user can click to open or close the entire category! DO NOT deviate from this HTML structure.)
+
+        <details>
+        <summary><h2>🛡️ SECURITY FINDINGS (Click to Expand)</h2></summary>
+        <br>
         
         > **🔹 [Issue Title]**
-        > **Severity:** [🔴 High / 🟡 Medium / 🟢 Low] | **Impact:** [High / Medium / Low] | **Effort:** [High / Medium / Low]
-        > **Confidence:** [████████░░ 80%]
+        > **Severity:** [🔴 High / 🟡 Medium / 🟢 Low] | **Confidence:** [████████░░ 80%]
         > 
-        > **🔍 Observation:** [A precise, objective explanation of what the code is currently doing. Max 2 lines. Verify against Tech Stack/Versions]
+        > **🔍 Observation:** [A precise, objective explanation of what the code is currently doing. Max 2 lines.]
         > 
         > **⚠ Potential Impact:** [Why this matters in the real world. Max 2 lines.]
         >
         > <details>
-        > <summary><b>💡 Click to view Suggestion</b></summary>
-        > 
+        > <summary><b>💡 Click to view AI Refactored Code</b></summary>
+        >
         > [A soft, constructive recommendation on how to approach the fix. Be suggestive, not demanding.]
-        > </details>
-        > 
-        > <details>
-        > <summary><b>✨ Click to view Refactored Code</b></summary>
         > 
         > **Current Flawed Code:**
         > ```javascript
@@ -156,16 +161,23 @@ class AIEngine:
         > (Actionable code correcting the issue)
         > ```
         > </details>
+        
+        </details>
+        
+        <details>
+        <summary><h2>🐛 BUG FINDINGS (Click to Expand)</h2></summary>
+        <br>
+        (Follow the exact same blockquote structure as above for any bugs found)
+        </details>
+        
+        (Repeat the <details> block pattern for any other categories like PERFORMANCE, ARCHITECTURE, CODE QUALITY, TESTING...)
 
-        ---
-        (Repeat for other findings...)
-
-        # 📋 5. DETAILED TABLE
+        # 📋 6. DETAILED TABLE
         | Issue | Category | Severity | Effort | Action |
         | :--- | :--- | :--- | :--- | :--- |
         | [Issue Title] | [Category] | [Severity] | [Effort] | [Suggested Action e.g. Fix Now / Improve] |
 
-        # 🎯 6. ACTION PLAN
+        # 🎯 7. ACTION PLAN
         
         - 🔥 **Fix First (High Impact, Low Effort)**
           - [Issue title]
@@ -173,13 +185,6 @@ class AIEngine:
           - [Issue title]
         - 📦 **Refactor Later (Low Priority)**
           - [Issue title]
-
-        # 📊 7. IMPACT vs EFFORT JSON DATA
-        ```json
-        [
-          {{ "issue": "Issue Name", "impact": "High", "effort": "Low" }}
-        ]
-        ```
         ---
         
         NOW, START YOUR REVIEW:

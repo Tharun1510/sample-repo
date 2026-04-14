@@ -62,7 +62,7 @@ def process_review_request(repo_full_name: str, pr_number: int, user_instruction
     # 3. Get repository context (up to 2 levels deep)
     repo_structure = gh_client.get_repo_structure(repo_full_name)
     
-    # 4. Optional: Try to grab key dependency file for deeper context
+    # 4. Grab key dependency file for deeper context
     key_context = "No specific dependency files configured."
     if "package.json" in repo_structure:
          content = gh_client.get_file_content(repo_full_name, "package.json")
@@ -71,15 +71,25 @@ def process_review_request(repo_full_name: str, pr_number: int, user_instruction
          content = gh_client.get_file_content(repo_full_name, "requirements.txt")
          if content: key_context = "requirements.txt:\n" + content[:1000]
 
+    # 4.2 Grab an existing source file to check for DRY violations
+    source_context = ""
+    # In a real app we'd scan all files, but for the demo we'll target the known utils file if it exists
+    if "utils/security.py" in repo_structure:
+         source_content = gh_client.get_file_content(repo_full_name, "utils/security.py")
+         if source_content: source_context = source_content
+    elif "main.py" in repo_structure:
+         source_content = gh_client.get_file_content(repo_full_name, "main.py")
+         if source_content: source_context = source_content
+
     # 4.5. Compute Deterministic Metrics
     complexity = calculate_cyclomatic_complexity(pr_diff)
     similarity_score = 0.0
-    if key_context != "No specific dependency files configured.":
-         similarity_score = calculate_levenshtein_distance(pr_diff, key_context)
+    if source_context:
+         similarity_score = calculate_levenshtein_distance(pr_diff, source_context)
          
     deterministic_metrics = f"""
     - **Cyclomatic Complexity Score**: {complexity} (If > 15, flag as High Risk / Bug Prone)
-    - **DRY Violation (Similarity to Key Context)**: {similarity_score}% (If > 80%, flag as duplicate code smell)
+    - **DRY Violation (Similarity to Existing Source Code)**: {similarity_score}% (If > 80%, flag as duplicate code smell and demand it be imported instead of copied)
     """
 
     # 5. Execute Layer 1: Context-Aware Enhancement
@@ -202,14 +212,22 @@ def api_layer1(req: Layer1Request):
          content = gh_client.get_file_content(req.repo_full_name, "requirements.txt")
          if content: key_context = "requirements.txt:\n" + content[:1000]
 
+    source_context = ""
+    if "utils/security.py" in repo_structure:
+         source_content = gh_client.get_file_content(req.repo_full_name, "utils/security.py")
+         if source_content: source_context = source_content
+    elif "main.py" in repo_structure:
+         source_content = gh_client.get_file_content(req.repo_full_name, "main.py")
+         if source_content: source_context = source_content
+
     complexity = calculate_cyclomatic_complexity(pr_diff)
     similarity_score = 0.0
-    if key_context != "No specific dependency files configured.":
-         similarity_score = calculate_levenshtein_distance(pr_diff, key_context)
+    if source_context:
+         similarity_score = calculate_levenshtein_distance(pr_diff, source_context)
          
     deterministic_metrics = f"""
     - **Cyclomatic Complexity Score**: {complexity} (If > 15, flag as High Risk / Bug Prone)
-    - **DRY Violation (Similarity to Key Context)**: {similarity_score}% (If > 80%, flag as duplicate code smell)
+    - **DRY Violation (Similarity to Existing Source Code)**: {similarity_score}% (If > 80%, flag as duplicate code smell and demand it be imported instead of copied)
     """
 
     enhanced_prompt = ai_engine.layer_1_enhance_prompt(
