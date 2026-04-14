@@ -97,8 +97,8 @@ class AIEngine:
 
         # 🧠 1. QUICK SUMMARY
         **Total Issues**: [Count] 
-         **Critical**: [Count] 
-         **Medium**: [Count] 
+        **Critical**: [Count]
+        **Medium**: [Count]
         **Low**: [Count]
         **Code Health Status**: [Excellent / Good / Needs Work / Critical]
 
@@ -119,37 +119,42 @@ class AIEngine:
         ```
         
         **Severity Breakdown**
-        High   [█████░░░░░] [Count]
-        Medium [████████░░] [Count]
-        Low    [██░░░░░░░░] [Count]
+
+        High   [█████░░░░░]  [Count]
+        Medium [████████░░]  [Count]
+        Low    [██░░░░░░░░]  [Count]
 
         **Code Health Score**
+
         [█████████░] 90%
 
-        # 🧮 4. DETERMINISTIC ALGORITHMS SCORE
-        Before AI analysis, the DULA core engine performed objective mathematical analysis:
-        - **Cyclomatic Complexity (McCabe):** `[Insert Score Here]` *(> 15 is High Risk)*
-        - **DRY Duplication (Levenshtein):** `[Insert Percentage Here]%` *(> 80% is a DRY Violation)*
+        # ⚡ 4. IN-DEPTH ANALYSIS
 
-        # ⚡ 5. IN-DEPTH ANALYSIS
+        (Group issues strictly by their category. Every finding MUST use the exact structure below. You MUST use literal HTML `<details>` and `<summary>` tags for the suggestions and fixes, or the layout will completely break!)
 
-        (Group issues strictly by their category. Every category MUST be wrapped in a master `<details>` tag so the user can click to open or close the entire category! DO NOT deviate from this HTML structure.)
-
-        <details>
-        <summary><h2>🛡️ SECURITY FINDINGS (Click to Expand)</h2></summary>
-        <br>
+        ### 🛡 [Category Name]
         
         > **🔹 [Issue Title]**
-        > **Severity:** [🔴 High / 🟡 Medium / 🟢 Low] | **Confidence:** [████████░░ 80%]
+        > **Severity:** [🔴 High / 🟡 Medium / 🟢 Low] 
+
+        >**Impact:** [High / Medium / Low] 
+
+        >**Effort:** [High / Medium / Low]
+
+        > **Confidence:** [████████░░ 80%]
         > 
-        > **🔍 Observation:** [A precise, objective explanation of what the code is currently doing. Max 2 lines.]
+        > **Observation:** [A precise, objective explanation of what the code is currently doing. Max 2 lines. Verify against Tech Stack/Versions]
         > 
-        > **⚠ Potential Impact:** [Why this matters in the real world. Max 2 lines.]
+        > **Potential Impact:** [Why this matters in the real world. Max 2 lines.]
         >
         > <details>
-        > <summary><b>💡 Click to view AI Refactored Code</b></summary>
-        >
+        > <summary><b>💡 Click to view Suggestion</b></summary>
+        > 
         > [A soft, constructive recommendation on how to approach the fix. Be suggestive, not demanding.]
+        > </details>
+        > 
+        > <details>
+        > <summary><b>✨ Click to view Refactored Code</b></summary>
         > 
         > **Current Flawed Code:**
         > ```javascript
@@ -161,23 +166,16 @@ class AIEngine:
         > (Actionable code correcting the issue)
         > ```
         > </details>
-        
-        </details>
-        
-        <details>
-        <summary><h2>🐛 BUG FINDINGS (Click to Expand)</h2></summary>
-        <br>
-        (Follow the exact same blockquote structure as above for any bugs found)
-        </details>
-        
-        (Repeat the <details> block pattern for any other categories like PERFORMANCE, ARCHITECTURE, CODE QUALITY, TESTING...)
 
-        # 📋 6. DETAILED TABLE
+        ---
+        (Repeat for other findings...)
+
+        # 📋 5. DETAILED TABLE
         | Issue | Category | Severity | Effort | Action |
         | :--- | :--- | :--- | :--- | :--- |
         | [Issue Title] | [Category] | [Severity] | [Effort] | [Suggested Action e.g. Fix Now / Improve] |
 
-        # 🎯 7. ACTION PLAN
+        # 🎯 6. ACTION PLAN
         
         - 🔥 **Fix First (High Impact, Low Effort)**
           - [Issue title]
@@ -185,6 +183,29 @@ class AIEngine:
           - [Issue title]
         - 📦 **Refactor Later (Low Priority)**
           - [Issue title]
+
+        # 🧮 7. DETERMINISTIC ALGORITHMS SCORE
+        
+        **Cyclomatic Complexity (McCabe):** [Extract from DETERMINISTIC METRIC SCORES above] (> 15 is High Risk)
+        <details>
+        <summary><b>🔍 See How (Complexity Breakdown)</b></summary>
+        
+        [Explain professionally exactly which parts of the code increased the score: e.g., "The score increased due to 4 nested `if` statements, 2 `for` loops, and multiple `try/catch` blocks in XYZ function. This indicates a violation of the Single Responsibility Principle."]
+        </details>
+
+        **DRY Duplication (Levenshtein):** [Extract from DETERMINISTIC METRIC SCORES above] (> 80% is considered a DRY Violation)
+        <details>
+        <summary><b>🔍 See How (Duplication Breakdown)</b></summary>
+        
+        [Identify precisely which code is duplicated based on the metrics. e.g., "Duplicate logic found resembling the `utils/security.py` core file."]
+        
+        **Actionable Import Code:**
+        ```python
+        # Instead of copying the code, use imported functionality:
+        [Provide exact import statement and usage snippet]
+        ```
+        </details>
+
         ---
         
         NOW, START YOUR REVIEW:
